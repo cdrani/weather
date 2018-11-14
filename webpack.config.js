@@ -8,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist/assets')
   },
   devServer: {
-    contentBase: [path.join(__dirname, 'dist')]
+    contentBase: [path.join(__dirname, 'dist')],
     hot: true
   },
   plugins: [new webpack.HotModuleReplacementPlugin()]
