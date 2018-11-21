@@ -19,7 +19,11 @@ const updateElementText = (el, text, units = '') => {
   })
 })
 
-searchBtn.addEventListener('click', async () => {
+searchInput.addEventListener('keypress', async e => {
+  if (e.which == 13) renderData()
+})
+
+const renderData = async () => {
   const searchVal = searchInput.value
   const weatherData = await getWeatherData(searchVal)
   if (weatherData) {
@@ -27,4 +31,8 @@ searchBtn.addEventListener('click', async () => {
     updateElementText('h1', weatherData.current.c, '\u2103')
     updateElementText('h1', weatherData.current.f, '\u2109')
   }
+}
+
+searchBtn.addEventListener('click', async () => {
+  renderData()
 })
