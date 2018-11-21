@@ -1,5 +1,5 @@
-const getWeatherData = async loc => {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${
+const getWeatherData = async city => {
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${
     process.env.APP_API_KEY
   }`
 
@@ -27,15 +27,15 @@ const weatherData = async response => {
       }
     },
     low: {
-      c: Math.round(celsius(city.main.temp_min)),
+      c: celsius(city.main.temp_min),
       get f() {
-        return Math.round(fahrenheit(this.c))
+        return fahrenheit(this.c)
       }
     },
     current: {
-      c: Math.round(celsius(city.main.temp)),
+      c: celsius(city.main.temp),
       get f() {
-        return Math.round(fahrenheit(this.c))
+        return fahrenheit(this.c)
       }
     },
     condition: city.weather[0].main,
