@@ -41,9 +41,11 @@ const weatherCard = ({ name, condition, current: { c, f } }) => {
     </div>
     <div class="card-body">
       ${condition}
+      ${c}\u2103
+      ${f}\u2109
     </div>
     <div class="card-footer">
-      <button class="btn btn-primary">Refresh</button>
+      <button id="refresh-btn" class="btn btn-primary">Refresh</button>
     </div>
   </div>
   `
@@ -52,8 +54,11 @@ const weatherCard = ({ name, condition, current: { c, f } }) => {
 
 const addToSideMenu = ({ name }) => {
   const menuItem = `
-    <li class="menu-item">
-      <a href="#" data-city="${name}"> <i class="icon icon-link"></i> ${name}</a>
+    <li class="menu-item bg-primary">
+      <a href="#" data-city="${name}"> 
+        <i class="icon icon-link"></i> 
+        ${name}
+      </a>
     </li>
     <li class="divider"></li>
   `
@@ -74,6 +79,7 @@ const renderData = async () => {
     clearCard()
     weatherCard(weatherData)
     weather.classList.remove('d-none')
+    refetchData(weatherData.name)
     addToSideMenu(weatherData)
   }
 
@@ -83,3 +89,15 @@ const renderData = async () => {
 searchBtn.addEventListener('click', async () => {
   renderData()
 })
+
+const refetchData = async city => {
+  const refreshBtn = document.getElementById('refresh-btn')
+  refreshBtn.addEventListener('click', async () => {
+    const data = await getWeatherData(city)
+    if (data) {
+      clearCard()
+      weatherCard(data)
+      weather.classList.remove('d-none')
+    }
+  })
+}
