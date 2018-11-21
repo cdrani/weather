@@ -3,11 +3,10 @@ import weatherApi from './weatherApi'
 
 const load = () => {
   const content = document.getElementById('content')
-  const weather = weatherApi('edmonton')
 
-  const display = `<h1>weather app</h1>`
+  const weather = displayWeather('edmonton')
 
-  content.insertAdjacentHTML('beforeend', display)
+  content.insertAdjacentHTML('beforeend', weather)
   return content
 }
 
