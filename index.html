@@ -17,12 +17,12 @@
     />
   </head>
   <body>
-    <div id="content">
+    <div id="content" class="container">
       <h1 class="text-center">Weather APP</h1>
       <ul class="tab tab-block">
-        <li class="tab-item active"><a href="#">Current</a></li>
-        <li class="tab-item"><a href="#">5 Day</a></li>
-        <li class="tab-item"><a href="#">Graph</a></li>
+        <li class="options tab-item active"><a href="#">Current</a></li>
+        <li class="options tab-item"><a href="#">5 Day</a></li>
+        <li class="options tab-item"><a href="#">Graph</a></li>
         <li class="tab-item tab-action">
           <div class="input-group input-inline">
             <input
@@ -30,6 +30,7 @@
               class="form-input input-sm"
               type="text"
               placeholder="City"
+              autofocus
             />
             <button
               id="search-btn"
