@@ -27,7 +27,7 @@ searchInput.addEventListener('keypress', async e => {
 
 const weatherCard = ({ name, condition, current: { c, f } }) => {
   const card = `
-  <div class="card column">
+  <div class="card column" id="card">
     <div class="card-image" style="width: 30%">
       <img 
         src="https://media.giphy.com/media/z4Qquuhfjc3QI/giphy-downsized.gif" 
@@ -60,10 +60,18 @@ const addToSideMenu = ({ name }) => {
   sidebar.insertAdjacentHTML('beforeend', menuItem)
 }
 
+const clearCard = () => {
+  const card = document.getElementById('card')
+  if (card) {
+    columns.removeChild(card)
+  }
+}
+
 const renderData = async () => {
   const searchVal = searchInput.value
   const weatherData = await getWeatherData(searchVal)
   if (weatherData) {
+    clearCard()
     weatherCard(weatherData)
     weather.classList.remove('d-none')
     addToSideMenu(weatherData)
