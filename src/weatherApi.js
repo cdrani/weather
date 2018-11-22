@@ -20,8 +20,11 @@ const weatherData = async response => {
   const city = await response.json()
   return {
     name: city.name,
+    country: city.sys.country,
+    sunrise: city.sys.sunrise * 1000,
+    sunset: city.sys.sunset * 1000,
     high: {
-      c: Math.round(celsius(city.main.temp_max)),
+      c: celsius(city.main.temp_max),
       get f() {
         return Math.round(fahrenheit(this.c))
       }
