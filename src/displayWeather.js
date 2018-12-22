@@ -26,6 +26,7 @@ searchInput.addEventListener('keypress', async e => {
 })
 
 const weatherCard = ({
+  img,
   name,
   country,
   condition,
@@ -52,6 +53,7 @@ const weatherCard = ({
             Current Weather as of ${formatDate()}
           </div>
         </div>
+          <img class="image-fit-contain image-responsive center" src="${img}" alt="map">
         <div class="card-body">
           <h1 class="h5">condition: ${condition}</h1>
           <h1 class="h5">Current: ${cc}\u2103</h1>
