@@ -1,4 +1,5 @@
 import getWeatherData from './weatherApi'
+import conditionGif from './conditions'
 
 const tabItems = document.getElementsByClassName('options')
 const searchInput = document.getElementById('search-input')
@@ -39,13 +40,6 @@ const weatherCard = ({
   const card = `
   <div class="card column" id="card">
     <div class="columns">
-      <div class="card-image column col-6">
-        <img 
-          src="https://media.giphy.com/media/z4Qquuhfjc3QI/giphy-downsized.gif" 
-          width="100%"  
-          class="image-fit-contain image-responsive" 
-        />
-      </div>
       <div class="column">
         <div class="card-header">
           <div class="card-title h1">${name}, ${country}</div>
@@ -53,14 +47,21 @@ const weatherCard = ({
             Current Weather as of ${formatDate()}
           </div>
         </div>
-          <img class="image-fit-contain image-responsive center" src="${img}" alt="map">
-        <div class="card-body">
-          <h1 class="h5">condition: ${condition}</h1>
-          <h1 class="h5">Current: ${cc}\u2103</h1>
-          <h1 class="h5">Low: ${lc}\u2103</h1>
-          <h1 class="h5">High: ${hc}\u2103</h1>
-          <h1 class="h5">Sunrise: ${formatDate(sunrise)}</h1>
-          <h1 class="h5">Sunset: ${formatDate(sunset)}</h1>
+        <div class="card-body columns">
+          <div class="column col-6">
+            <img 
+              width="100%"
+              src="${conditionGif(condition)}" 
+            />
+          </div>
+          <div class="column col-6">
+            <h1 class="h5">condition: ${condition}</h1>
+            <h1 class="h5">Current: ${cc}\u2103</h1>
+            <h1 class="h5">Low: ${lc}\u2103</h1>
+            <h1 class="h5">High: ${hc}\u2103</h1>
+            <h1 class="h5">Sunrise: ${formatDate(sunrise)}</h1>
+            <h1 class="h5">Sunset: ${formatDate(sunset)}</h1>
+          </div>
         </div>
         <div class="card-footer">
           <button id="refresh-btn" class="btn btn-primary">Refresh</button>
