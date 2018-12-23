@@ -2,9 +2,8 @@ import { formatDate } from './utils'
 
 const columns = document.getElementById('columns')
 
-const weatherGraph = ({ map, name, country }) => { 
-  const card = 
-`
+const weatherGraph = ({ map, name, country, temps }) => {
+  const card = `
   <div class="card column" id="card">
     <div class="columns">
       <div class="column">
@@ -21,7 +20,7 @@ const weatherGraph = ({ map, name, country }) => {
               src="${map}" 
             />
           </div>
-          <div class="column col-6">
+          <div class="column col-6" id="chart">
           </div>
         </div>
         <div class="card-footer">

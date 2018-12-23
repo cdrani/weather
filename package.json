@@ -16,6 +16,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "dotenv-webpack": "1.5.7"
+    "dotenv-webpack": "1.5.7",
+    "sparklines": "1.2.0"
   }
 }

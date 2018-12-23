@@ -3,6 +3,7 @@ import getFiveDayWeatherData from './fiveDayWeather'
 import conditionGif from './conditions'
 import weatherCard from './weatherCard'
 import weatherGraph from './weatherGraph'
+import sparkLine from './sparkline'
 import { formatDate } from './utils'
 
 const tabItems = document.getElementsByClassName('options')
@@ -11,6 +12,7 @@ const searchBtn = document.getElementById('search-btn')
 const columns = document.getElementById('columns')
 const sidebar = document.getElementById('menu')
 const weather = document.getElementById('weather')
+const chart = document.getElementById('chart')
 
 const updateElementText = (el, text, units = '') => {
   const element = document.createElement(el)
@@ -38,7 +40,6 @@ const updateElementText = (el, text, units = '') => {
 searchInput.addEventListener('keypress', async e => {
   if (e.which === 13) renderData()
 })
-
 
 const createElement = (element, classes, options = {}) => {
   const el = document.createElement(element)
@@ -94,7 +95,8 @@ const renderData = async city => {
     if (document.querySelector('.options.active').id === 'current') {
       weatherCard(weatherData)
     } else {
-     weatherGraph(weatherData)
+      weatherGraph(weatherData)
+      sparkLine(weatherData.temps)
     }
 
     weather.classList.remove('d-none')
@@ -129,6 +131,7 @@ const setAsActiveLink = async e => {
   } else {
     data = await getFiveDayWeatherData(e.target.dataset.city)
     weatherGraph(data)
+    sparkLine(data.temps)
   }
 }
 
@@ -148,6 +151,7 @@ const refetchData = async city => {
         weatherCard(data)
       } else {
         weatherGraph(data)
+        sparkLine(data.temps)
       }
     }
   })
