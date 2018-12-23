@@ -1,5 +1,9 @@
 import getWeatherData from './weatherApi'
+import getFiveDayWeatherData from './fiveDayWeather'
 import conditionGif from './conditions'
+import weatherCard from './weatherCard'
+import weatherGraph from './weatherGraph'
+import { formatDate } from './utils'
 
 const tabItems = document.getElementsByClassName('options')
 const searchInput = document.getElementById('search-input')
@@ -19,74 +23,28 @@ const updateElementText = (el, text, units = '') => {
     const active = document.querySelector('.tab-item.active')
     active.classList.remove('active')
     tabItem.classList.add('active')
+    const cityList = document.querySelectorAll('[data-city]')
+    if (cityList.length >= 1) {
+      ;[...cityList].forEach(el =>
+        el.addEventListener('click', setAsActiveLink)
+      )
+      const el = document.getElementsByClassName('bg-primary')[0]
+      const city = el.innerText
+      renderData(city)
+    }
   })
 })
 
 searchInput.addEventListener('keypress', async e => {
-  if (e.which == 13) renderData()
+  if (e.which === 13) renderData()
 })
 
-const weatherCard = ({
-  img,
-  name,
-  country,
-  condition,
-  sunrise,
-  sunset,
-  current: { c: cc },
-  high: { c: hc },
-  low: { c: lc }
-}) => {
-  const card = `
-  <div class="card column" id="card">
-    <div class="columns">
-      <div class="column">
-        <div class="card-header">
-          <div class="card-title h1">${name}, ${country}</div>
-          <div class="card-subtitle text-gray">
-            Current Weather as of ${formatDate()}
-          </div>
-        </div>
-        <div class="card-body columns">
-          <div class="column col-6">
-            <img 
-              width="100%"
-              src="${conditionGif(condition)}" 
-            />
-          </div>
-          <div class="column col-6">
-            <h1 class="h5">condition: ${condition}</h1>
-            <h1 class="h5">Current: ${cc}\u2103</h1>
-            <h1 class="h5">Low: ${lc}\u2103</h1>
-            <h1 class="h5">High: ${hc}\u2103</h1>
-            <h1 class="h5">Sunrise: ${formatDate(sunrise)}</h1>
-            <h1 class="h5">Sunset: ${formatDate(sunset)}</h1>
-          </div>
-        </div>
-        <div class="card-footer">
-          <button id="refresh-btn" class="btn btn-primary">Refresh</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  `
-  columns.insertAdjacentHTML('beforeend', card)
-}
-
-const formatDate = (date = Date.now()) => {
-  const d = new Date(date)
-  const hour = formatDigits(d.getHours())
-  const min = formatDigits(d.getMinutes())
-  return `${hour}:${min}`
-}
-
-const formatDigits = digit => (digit < 10 ? `0${digit}` : digit)
 
 const createElement = (element, classes, options = {}) => {
   const el = document.createElement(element)
 
   for (let option in options) {
-    if (option == 'city') {
+    if (option === 'city') {
       el.dataset.city = options[option]
     } else {
       const text = document.createTextNode(options[option])
@@ -98,16 +56,19 @@ const createElement = (element, classes, options = {}) => {
 }
 
 const addToSideMenu = ({ name }) => {
-  const anchor = createElement('a', 'btn text-light bg-primary btn-sm', {
-    city: name,
-    text: name
-  })
-  anchor.addEventListener('click', setAsActiveLink)
-  const liContainer = createElement('li', 'menu-item')
-  const liDivider = createElement('li', 'divider')
-  liContainer.appendChild(anchor)
-  sidebar.appendChild(liContainer)
-  sidebar.appendChild(liDivider)
+  const noDuplications = [...document.querySelectorAll('[data-city]')]
+  if (noDuplications.filter(link => link.text === name).length === 0) {
+    const anchor = createElement('a', 'btn text-light bg-primary btn-sm', {
+      city: name,
+      text: name
+    })
+    anchor.addEventListener('click', setAsActiveLink)
+    const liContainer = createElement('li', 'menu-item')
+    const liDivider = createElement('li', 'divider')
+    liContainer.appendChild(anchor)
+    sidebar.appendChild(liContainer)
+    sidebar.appendChild(liDivider)
+  }
 }
 
 const clearCard = () => {
@@ -119,11 +80,23 @@ const clearCard = () => {
 
 const renderData = async city => {
   const searchVal = city || searchInput.value
-  const weatherData = await getWeatherData(searchVal)
+  let weatherData
+
+  if (document.querySelector('.options.active').id === 'current') {
+    weatherData = await getWeatherData(searchVal)
+  } else {
+    weatherData = await getFiveDayWeatherData(searchVal)
+  }
+
   if (weatherData) {
     clearCard()
     removeCurrentActiveLink()
-    weatherCard(weatherData)
+    if (document.querySelector('.options.active').id === 'current') {
+      weatherCard(weatherData)
+    } else {
+     weatherGraph(weatherData)
+    }
+
     weather.classList.remove('d-none')
     refetchData(weatherData.name)
     addToSideMenu(weatherData)
@@ -133,7 +106,7 @@ const renderData = async city => {
 }
 
 searchBtn.addEventListener('click', async () => {
-  renderData()
+  await renderData()
 })
 
 const removeCurrentActiveLink = () => {
@@ -149,17 +122,33 @@ const setAsActiveLink = async e => {
   e.target.classList.remove('bg-secondary', 'text-dark')
   e.target.classList.add('bg-primary', 'text-light')
   clearCard()
-  const data = await getWeatherData(e.target.dataset.city)
-  weatherCard(data)
+  let data
+  if (document.querySelector('.options.active').id === 'current') {
+    data = await getWeatherData(e.target.dataset.city)
+    weatherCard(data)
+  } else {
+    data = await getFiveDayWeatherData(e.target.dataset.city)
+    weatherGraph(data)
+  }
 }
 
 const refetchData = async city => {
   const refreshBtn = document.getElementById('refresh-btn')
+  let data
   refreshBtn.addEventListener('click', async () => {
-    const data = await getWeatherData(city)
+    if (document.querySelector('.options.active').id === 'current') {
+      data = await getWeatherData(city)
+    } else {
+      data = await getFiveDayWeatherData(city)
+    }
+
     if (data) {
       clearCard()
-      weatherCard(data)
+      if (document.querySelector('.options.active').id === 'current') {
+        weatherCard(data)
+      } else {
+        weatherGraph(data)
+      }
     }
   })
 }

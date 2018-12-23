@@ -19,9 +19,6 @@ const fahrenheit = temp => Math.round(temp * (9 / 5)) + 32
 const weatherData = async response => {
   const city = await response.json()
   return {
-    img: `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/${
-      city.coord.lon
-    },${city.coord.lat},10.0,0,0/500x300?access_token=${process.env.MAP_TOKEN}`,
     name: city.name,
     country: city.sys.country,
     sunrise: city.sys.sunrise * 1000,
