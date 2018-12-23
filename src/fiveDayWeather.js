@@ -1,19 +1,4 @@
-const getFiveDayWeatherData = async city => {
-  const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${
-    process.env.APP_API_KEY
-  }`
-
-  try {
-    const response = await fetchWeather(url)
-    return await fiveDayWeatherData(response)
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-const fetchWeather = url => fetch(url, { mode: 'cors' })
-
-const fiveDayWeatherData = async response => {
+const getFiveDayWeatherData = async response => {
   const cityData = await response.json()
   const {
     list,

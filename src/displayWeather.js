@@ -1,10 +1,10 @@
-import getWeatherData from './weatherApi'
-import getFiveDayWeatherData from './fiveDayWeather'
 import conditionGif from './conditions'
+import { createElement, formatDate, getWeatherData } from './utils'
+import getCurrentWeatherData from './currentWeather'
+import getFiveDayWeatherData from './fiveDayWeather'
 import weatherCard from './weatherCard'
 import weatherGraph from './weatherGraph'
 import sparkLine from './sparkline'
-import { formatDate } from './utils'
 
 const tabItems = document.getElementsByClassName('options')
 const searchInput = document.getElementById('search-input')
@@ -13,12 +13,6 @@ const columns = document.getElementById('columns')
 const sidebar = document.getElementById('menu')
 const weather = document.getElementById('weather')
 const chart = document.getElementById('chart')
-
-const updateElementText = (el, text, units = '') => {
-  const element = document.createElement(el)
-  element.textContent = `${text}${units}`
-  content.appendChild(element)
-}
 
 ;[...tabItems].forEach(tabItem => {
   tabItem.addEventListener('click', () => {
@@ -40,21 +34,6 @@ const updateElementText = (el, text, units = '') => {
 searchInput.addEventListener('keypress', async e => {
   if (e.which === 13) renderData()
 })
-
-const createElement = (element, classes, options = {}) => {
-  const el = document.createElement(element)
-
-  for (let option in options) {
-    if (option === 'city') {
-      el.dataset.city = options[option]
-    } else {
-      const text = document.createTextNode(options[option])
-      el.appendChild(text)
-    }
-  }
-  el.classList = classes
-  return el
-}
 
 const addToSideMenu = ({ name }) => {
   const noDuplications = [...document.querySelectorAll('[data-city]')]
@@ -84,9 +63,13 @@ const renderData = async city => {
   let weatherData
 
   if (document.querySelector('.options.active').id === 'current') {
-    weatherData = await getWeatherData(searchVal)
+    weatherData = await getWeatherData(searchVal, getCurrentWeatherData)
   } else {
-    weatherData = await getFiveDayWeatherData(searchVal)
+    weatherData = await getWeatherData(
+      searchVal,
+      getFiveDayWeatherData,
+      'forecast'
+    )
   }
 
   if (weatherData) {
@@ -126,10 +109,14 @@ const setAsActiveLink = async e => {
   clearCard()
   let data
   if (document.querySelector('.options.active').id === 'current') {
-    data = await getWeatherData(e.target.dataset.city)
+    data = await getWeatherData(e.target.dataset.city, getCurrentWeatherData)
     weatherCard(data)
   } else {
-    data = await getFiveDayWeatherData(e.target.dataset.city)
+    data = await getWeatherData(
+      e.target.dataset.city,
+      getFiveDayWeatherData,
+      'forecast'
+    )
     weatherGraph(data)
     sparkLine(data.temps)
   }
@@ -140,9 +127,9 @@ const refetchData = async city => {
   let data
   refreshBtn.addEventListener('click', async () => {
     if (document.querySelector('.options.active').id === 'current') {
-      data = await getWeatherData(city)
+      data = await getWeatherData(city, getCurrentWeatherData)
     } else {
-      data = await getFiveDayWeatherData(city)
+      data = await getWeatherData(city, getFiveDayWeatherData, 'forecast')
     }
 
     if (data) {

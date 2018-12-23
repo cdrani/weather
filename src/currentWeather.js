@@ -1,22 +1,6 @@
-const getWeatherData = async city => {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${
-    process.env.APP_API_KEY
-  }`
+import { celsius, fahrenheit } from './utils'
 
-  try {
-    const response = await fetchWeather(url)
-    return await weatherData(response)
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-const fetchWeather = url => fetch(url, { mode: 'cors' })
-
-const celsius = temp => Math.round(temp - 273.15)
-const fahrenheit = temp => Math.round(temp * (9 / 5)) + 32
-
-const weatherData = async response => {
+const getCurrentWeatherData = async response => {
   const city = await response.json()
   return {
     name: city.name,
@@ -46,4 +30,4 @@ const weatherData = async response => {
   }
 }
 
-export default getWeatherData
+export default getCurrentWeatherData
