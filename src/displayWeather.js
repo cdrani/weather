@@ -2,8 +2,8 @@ import conditionGif from './conditions'
 import { createElement, formatDate, getWeatherData } from './utils'
 import getCurrentWeatherData from './currentWeather'
 import getFiveDayWeatherData from './fiveDayWeather'
-import weatherCard from './weatherCard'
-import weatherGraph from './weatherGraph'
+import weatherCard from './components/weatherCard'
+import weatherGraph from './components/weatherGraph'
 import sparkLine from './sparkline'
 
 const tabItems = document.getElementsByClassName('options')

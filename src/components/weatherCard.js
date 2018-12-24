@@ -1,5 +1,5 @@
-import { formatDate } from './utils'
-import conditionGif from './conditions'
+import { formatDate } from '../utils'
+import conditionGif from '../conditions'
 
 const weatherCard = ({
   name,
