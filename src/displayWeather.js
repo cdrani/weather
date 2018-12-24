@@ -19,21 +19,29 @@ const chart = document.getElementById('chart')
     const active = document.querySelector('.tab-item.active')
     active.classList.remove('active')
     tabItem.classList.add('active')
-    const cityList = document.querySelectorAll('[data-city]')
-    if (cityList.length >= 1) {
-      ;[...cityList].forEach(el =>
-        el.addEventListener('click', setAsActiveLink)
-      )
-      const el = document.getElementsByClassName('bg-primary')[0]
-      const city = el.innerText
-      renderData(city)
-    }
+    const city = document.querySelector('.bg-primary.text-light')
+    renderData(city.innerText)
   })
 })
 
 searchInput.addEventListener('keypress', async e => {
-  if (e.which === 13) renderData()
+  if (e.which === 13) {
+    removeCurrentActiveLink()
+    renderData()
+  }
 })
+
+const displayLocation = async res => {
+  const data = await res.json()
+  if (data) {
+    await renderData(data.city)
+  }
+}
+
+export const getUserLocation = async () => {
+  const loc = await fetch('https://geoip-db.com/json/', { mode: 'cors' })
+  return await displayLocation(loc)
+}
 
 const addToSideMenu = ({ name }) => {
   const noDuplications = [...document.querySelectorAll('[data-city]')]
@@ -58,23 +66,17 @@ const clearCard = () => {
   }
 }
 
-const renderData = async city => {
-  const searchVal = city || searchInput.value
+const renderData = async (city = searchInput.value) => {
   let weatherData
 
   if (document.querySelector('.options.active').id === 'current') {
-    weatherData = await getWeatherData(searchVal, getCurrentWeatherData)
+    weatherData = await getWeatherData(city, getCurrentWeatherData)
   } else {
-    weatherData = await getWeatherData(
-      searchVal,
-      getFiveDayWeatherData,
-      'forecast'
-    )
+    weatherData = await getWeatherData(city, getFiveDayWeatherData, 'forecast')
   }
 
   if (weatherData) {
     clearCard()
-    removeCurrentActiveLink()
     if (document.querySelector('.options.active').id === 'current') {
       weatherCard(weatherData)
     } else {
@@ -95,7 +97,7 @@ searchBtn.addEventListener('click', async () => {
 })
 
 const removeCurrentActiveLink = () => {
-  const currentlyActive = document.querySelector('.bg-primary')
+  const currentlyActive = document.querySelector('.bg-primary.text-light')
   if (currentlyActive) {
     currentlyActive.classList.remove('bg-primary', 'text-light')
     currentlyActive.classList.add('bg-secondary', 'text-dark')
@@ -134,7 +136,7 @@ const refetchData = async city => {
 
     if (data) {
       clearCard()
-      if (document.querySelector('.options.active').id === 'current') {
+      if (document.qeerySelector('.options.active').id === 'current') {
         weatherCard(data)
       } else {
         weatherGraph(data)

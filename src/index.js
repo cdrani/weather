@@ -1,1 +1,2 @@
-import displayWeather from './displayWeather'
+import displayWeather, { getUserLocation } from './displayWeather'
+getUserLocation()

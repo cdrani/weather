@@ -26,7 +26,6 @@ const getCurrentWeatherData = async response => {
       }
     },
     condition: city.weather[0].main,
-    conditionId: city.weather[0].id
   }
 }
 

@@ -22,7 +22,7 @@ export const createElement = (element, classes, options = {}) => {
   return el
 }
 
-export const fetchWeather = url => fetch(url, { mode: 'cors' })
+const fetchWeather = url => fetch(url, { mode: 'cors' })
 
 export const celsius = temp => Math.round(temp - 273.15)
 
