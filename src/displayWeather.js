@@ -43,7 +43,7 @@ export const getUserLocation = async () => {
   return await displayLocation(loc)
 }
 
-const addToSideMenu = ({ name }) => {
+const addToSideMenu = name => {
   const noDuplications = [...document.querySelectorAll('[data-city]')]
   if (noDuplications.filter(link => link.text === name).length === 0) {
     const anchor = createElement('a', 'btn text-light bg-primary btn-sm', {
@@ -59,10 +59,35 @@ const addToSideMenu = ({ name }) => {
   }
 }
 
+searchBtn.addEventListener('click', async () => {
+  if (searchInput.value) {
+    await renderData()
+  }
+})
+
 const clearCard = () => {
   const card = document.getElementById('card')
   if (card) {
     columns.removeChild(card)
+  }
+}
+
+const refetchData = async city => {
+  let data
+  if (document.querySelector('.options.active').id === 'current') {
+    data = await getWeatherData(city, getCurrentWeatherData)
+  } else {
+    data = await getWeatherData(city, getFiveDayWeatherData, 'forecast')
+  }
+
+  if (data) {
+    clearCard()
+    if (document.querySelector('.options.active').id === 'current') {
+      weatherCard(data)
+    } else {
+      weatherGraph(data)
+      sparkLine(data.temps)
+    }
   }
 }
 
@@ -85,16 +110,23 @@ const renderData = async (city = searchInput.value) => {
     }
 
     weather.classList.remove('d-none')
-    refetchData(weatherData.name)
-    addToSideMenu(weatherData)
+    addToSideMenu(weatherData.name)
   }
 
   searchInput.value = ''
 }
 
-searchBtn.addEventListener('click', async () => {
-  await renderData()
-})
+// export const setupRefreshAction = () => {
+//   const refreshBtn = document.getElementById('refresh-btn')
+//   const city = document.querySelector('.bg-primary').innerText
+//   console.log('city', city)
+
+//   if (refreshBtn) {
+//     refreshBtn.addEventListener('click', e => {
+//       refetchData(city)
+//     })
+//   }
+// }
 
 const removeCurrentActiveLink = () => {
   const currentlyActive = document.querySelector('.bg-primary.text-light')
@@ -122,26 +154,4 @@ const setAsActiveLink = async e => {
     weatherGraph(data)
     sparkLine(data.temps)
   }
-}
-
-const refetchData = async city => {
-  const refreshBtn = document.getElementById('refresh-btn')
-  let data
-  refreshBtn.addEventListener('click', async () => {
-    if (document.querySelector('.options.active').id === 'current') {
-      data = await getWeatherData(city, getCurrentWeatherData)
-    } else {
-      data = await getWeatherData(city, getFiveDayWeatherData, 'forecast')
-    }
-
-    if (data) {
-      clearCard()
-      if (document.qeerySelector('.options.active').id === 'current') {
-        weatherCard(data)
-      } else {
-        weatherGraph(data)
-        sparkLine(data.temps)
-      }
-    }
-  })
 }

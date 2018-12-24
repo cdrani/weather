@@ -16,9 +16,9 @@ const weatherCard = ({
       <div class="columns">
         <div class="column">
           <div class="card-header">
-            <div class="card-title h1">${name}, ${country}</div>
-            <div class="card-subtitle text-gray">
-              Current Weather as of ${formatDate()}
+            <h1 class="card-title h1">${name}, ${country}</h1>
+            <div class="card-subtitle text-gray h4">
+              weather data as of ${formatDate()}
             </div>
           </div>
           <div class="card-body columns">
@@ -29,16 +29,13 @@ const weatherCard = ({
               />
             </div>
             <div class="column col-6">
-              <h1 class="h5">condition: ${condition}</h1>
-              <h1 class="h5">Current: ${cc}\u2103</h1>
-              <h1 class="h5">Low: ${lc}\u2103</h1>
-              <h1 class="h5">High: ${hc}\u2103</h1>
-              <h1 class="h5">Sunrise: ${formatDate(sunrise)}</h1>
-              <h1 class="h5">Sunset: ${formatDate(sunset)}</h1>
+              <h1 class="h1">condition: ${condition}</h1>
+              <h1 class="h1">Current: ${cc}\u2103</h1>
+              <h1 class="h1">Low: ${lc}\u2103</h1>
+              <h1 class="h1">High: ${hc}\u2103</h1>
+              <h1 class="h1">Sunrise: ${formatDate(sunrise)}</h1>
+              <h1 class="h1">Sunset: ${formatDate(sunset)}</h1>
             </div>
-          </div>
-          <div class="card-footer">
-            <button id="refresh-btn" class="btn btn-primary">Refresh</button>
           </div>
         </div>
       </div>
@@ -46,5 +43,9 @@ const weatherCard = ({
     `
   columns.insertAdjacentHTML('beforeend', card)
 }
+
+// <div class="card-footer">
+//   <button id="refresh-btn" class="btn btn-primary">Refresh</button>
+// </div>
 
 export default weatherCard
