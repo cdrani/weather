@@ -24,10 +24,27 @@ const chart = document.getElementById('chart')
   })
 })
 
+const capitalize = str => str[0].toUpperCase() + str.substr(1)
+
+const cityList = () => {
+  const cities = document.querySelectorAll('[data-city]')
+  const cityNames = [...cities].map(city => city.innerText)
+  return cityNames
+}
+
+const notInCityLIst = city => !cityList().includes(capitalize(city))
+
 searchInput.addEventListener('keypress', async e => {
-  if (e.which === 13) {
+  if (e.which === 13 && notInCityLIst(searchInput.value)) {
     removeCurrentActiveLink()
     renderData()
+  }
+})
+
+searchBtn.addEventListener('click', async () => {
+  if (searchInput.value && notInCityLIst(searchInput.value)) {
+    removeCurrentActiveLink()
+    await renderData()
   }
 })
 
@@ -58,12 +75,6 @@ const addToSideMenu = name => {
     sidebar.appendChild(liDivider)
   }
 }
-
-searchBtn.addEventListener('click', async () => {
-  if (searchInput.value) {
-    await renderData()
-  }
-})
 
 const clearCard = () => {
   const card = document.getElementById('card')
