@@ -7,7 +7,7 @@ This is a weather application built using the [openweathermap](https://openweath
 
 ## UI
 
-App was designed completey using [spectrecss](https://picturepan2.github.io/spectre/), and although the ui is sparse, the weather data is placed alongside a gif of the current weather condition for fun and immediacy. On the 5-Day tab, a map of the current location is displayed, with a sparkline chart of the 5-Day temperature highs and lows displayed on the chart. Currently this chart is not very readable, essentially missing a legend, data points, axis, etc, but will be most likely be replaced with a better charting library.
+App was designed completely using [spectrecss](https://picturepan2.github.io/spectre/), and although the ui is sparse, the weather data is placed alongside a gif of the current weather condition for fun and immediacy. On the 5-Day tab, a map of the current location is displayed, with a sparkline chart of the 5-Day temperature highs and lows displayed on the chart. Currently this chart is not very readable, essentially missing a legend, data points, axis, etc, but will be most likely be replaced with a better charting library.
 
 ## Preview
 
