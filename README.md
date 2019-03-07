@@ -3,7 +3,7 @@
 Live: [weather](https://cdrani.github.io/weather)
 
 # Overview
-This is a weather application built using the [openweathermap](https://openweathermap.org) api to fetch weather data from cities around the world. On load, the weather data pertaining your current location via your [geolocation ip](https://geoip-db.com/json/). Subsequent searches are added to a cities list, thus allowing for switching between cities.
+This is a weather application built using the [openweathermap](https://openweathermap.org) api to fetch weather data from cities around the world. On load, the weather data pertaining to your current location via your [geolocation ip](https://geoip-db.com/json/) is displayed. The weather data includes current, low, and high temperatures as well as sunrise and sunset times. Subsequent searches are added to a cities list, thus allowing for switching between cities.
 
 ## UI
 
